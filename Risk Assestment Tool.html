@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NLNB Risk Assessment Tool</title>
+    <!-- Bootstrap CSS first -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Then your custom CSS to override Bootstrap as needed -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <header class="bg-black border-bottom">
+      <div class="container d-flex flex-wrap justify-content-between align-items-center py-3">
+        <a class="d-flex align-items-center mb-2 mb-lg-0 text-light text-decoration-none" href="Index.html">
+          <span class="fs-4">NLNB Risk Assessment Tool</span>
+        </a>
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link link-light" href="Index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link link-light" href="Risk%20Assestment%20Tool.html">Tool</a></li>
+          <li class="nav-item"><a class="nav-link link-light" href="Risk.html">About</a></li>
+          <li class="nav-item"><a class="nav-link link-light" href="aboutme.html">The Team</a></li>
+		  <li class="nav-item"><a class="nav-link link-light" href="Contact Us.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </header>
+	
+	<main class="wrap main-grid" id="app">
+		<!-- Form / controls -->
+		<aside class="panel form-panel" aria-labelledby="input-heading">
+			<h2 id="input-heading">Risk Input</h2>
+			
+			<form id="risk-form">
+				<label for="hazard">Hazard / Asset</label>
+				<input id="hazard" name="hazard" type="text" placeholder="e.g. Chemical storage" required>
+
+				<label for="description">Short description</label>
+				<textarea id="description" name="description" rows="3" placeholder="Describe the hazard"></textarea>
+
+				<div class="row">
+					<div>
+						<label for="likelihood">Likelihood</label>
+						<select id="likelihood" name="likelihood" required>
+							<option value="1">1 — Rare</option>
+							<option value="2">2 — Unlikely</option>
+							<option value="3" selected>3 — Possible</option>
+							<option value="4">4 — Likely</option>
+							<option value="5">5 — Almost Certain</option>
+						</select>
+					</div>
+					<div>
+						<label for="severity">Severity</label>
+						<select id="severity" name="severity" required>
+							<option value="1">1 — Insignificant</option>
+							<option value="2">2 — Minor</option>
+							<option value="3" selected>3 — Moderate</option>
+							<option value="4">4 — Major</option>
+							<option value="5">5 — Catastrophic</option>
+						</select>
+					</div>
+				</div>
+
+				<label for="mitigation">Existing mitigations (optional)</label>
+				<input id="mitigation" name="mitigation" type="text" placeholder="e.g. Fire suppression system">
+				
+
+				<div class="form-actions">
+					<button type="submit" id="calc-btn" class="btn primary">Calculate Risk</button>
+					<button type="button" id="reset-btn" class="btn">Reset</button>
+				</div>
+			</form>
+		</aside>
+
+		<!-- Results -->
+		<section class="panel results-panel" aria-live="polite" aria-atomic="true">
+			<h2>Results</h2>
+			<div class="result-summary">
+				<div class="score">
+					<span class="score-value" id="score-value">—</span>
+					<span class="score-label" id="score-label">No calculation yet</span>
+				</div>
+				<div class="recommendations">
+					<h3>Recommended actions</h3>
+					<ul id="recommend-list">
+						<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>
+					</ul>
+				</div>
+
+				<!-- Risk matrix -->
+				<div class="matrix-panel" aria-label="Risk matrix">
+				  <h3>Risk Matrix</h3>
+				  <div class="matrix-grid" role="grid" aria-hidden="false">
+				    <!-- header row: empty corner then Likelihood 1..5 -->
+				    <div class="matrix-cell header empty"></div>
+				    <div class="matrix-cell header">L1</div>
+				    <div class="matrix-cell header">L2</div>
+				    <div class="matrix-cell header">L3</div>
+				    <div class="matrix-cell header">L4</div>
+				    <div class="matrix-cell header">L5</div>
+
+				    <!-- severity 5 (top) -->
+					<div class="matrix-cell header">S5</div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
+
+				    <!-- severity 4 -->
+					<div class="matrix-cell header">S4</div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
+
+				    <!-- severity 3 -->
+					<div class="matrix-cell header">S3</div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
+
+				    <!-- severity 2 -->
+					<div class="matrix-cell header">S2</div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
+
+				    <!-- severity 1 (bottom) -->
+					<div class="matrix-cell header">S1</div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
+					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
+				  </div>
+				  <p class="muted small">Click a cell to set Likelihood and Severity; cells are colored by risk band.</p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="wrap">
+			<small>Built for ETI 302 — simple demo tool. Not for production use.</small>
+		</div>
+	</footer>
+
+	<script>
+		// Minimal interactive demo: score = likelihood * severity
+		(function(){
+			const form = document.getElementById('risk-form');
+			const scoreValue = document.getElementById('score-value');
+			const scoreLabel = document.getElementById('score-label');
+			const recommendList = document.getElementById('recommend-list');
+			const resetBtn = document.getElementById('reset-btn');
+
+			function riskLevel(score){
+				if(score <= 4) return {label: 'Low', class: 'low', advice: ['Monitor periodically.']};
+				if(score <= 8) return {label: 'Moderate', class: 'moderate', advice: ['Review controls and reduce exposure.']};
+				if(score <= 12) return {label: 'High', class: 'high', advice: ['Implement additional mitigations and escalate.']};
+				return {label: 'Critical', class: 'critical', advice: ['Immediate action required. Evacuate if necessary.']};
+			}
+
+			form.addEventListener('submit', function(e){
+				e.preventDefault();
+				calculateAndDisplay();
+			});
+
+			resetBtn.addEventListener('click', function(){
+				form.reset();
+				scoreValue.textContent = '—';
+				scoreValue.className = 'score-value';
+				scoreLabel.textContent = 'No calculation yet';
+				recommendList.innerHTML = '<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>';
+				// clear matrix selections and labels
+				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
+				cells.forEach(c => {
+					c.classList.remove('selected');
+					const label = c.querySelector('.cell-label');
+					if(label) label.textContent = '';
+				});
+			});
+
+			// helper used by form submit and matrix clicks
+			function calculateAndDisplay(){
+				const likelihood = Number(form.likelihood.value || 0);
+				const severity = Number(form.severity.value || 0);
+				const hazard = form.hazard.value.trim() || 'Unnamed hazard';
+				const mitigation = form.mitigation.value.trim();
+
+				const score = likelihood * severity;
+				const level = riskLevel(score);
+
+				scoreValue.textContent = score;
+				scoreValue.className = 'score-value ' + level.class;
+				scoreLabel.textContent = level.label + ' — ' + hazard;
+
+				// recommendations
+				recommendList.innerHTML = '';
+				level.advice.forEach(a => {
+					const li = document.createElement('li');
+					li.textContent = a + (mitigation ? ' (consider: ' + mitigation + ')' : '');
+					recommendList.appendChild(li);
+				});
+
+				// highlight matrix cell
+				highlightMatrixCell(likelihood, severity);
+			}
+
+			function highlightMatrixCell(likelihood, severity){
+				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
+				cells.forEach(c => c.classList.remove('selected'));
+				const selector = `.matrix-cell.matrix-cell--clickable[data-likelihood="${likelihood}"][data-severity="${severity}"]`;
+				const el = document.querySelector(selector);
+				if(el){
+					el.classList.add('selected');
+					// set the label inside the selected cell to the hazard name (if provided)
+					const label = el.querySelector('.cell-label');
+					if(label){
+						const hazardName = (form.hazard && form.hazard.value) ? form.hazard.value.trim() : '';
+						label.textContent = hazardName;
+					}
+				}
+			}
+
+			// initialize matrix coloring and click handlers
+			(function initMatrix(){
+				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
+				cells.forEach(c => {
+					const l = Number(c.dataset.likelihood);
+					const s = Number(c.dataset.severity);
+					const score = l * s;
+					const level = riskLevel(score);
+					c.classList.add(level.class);
+					c.tabIndex = 0;
+					c.addEventListener('click', function(){
+						form.likelihood.value = l;
+						form.severity.value = s;
+						calculateAndDisplay();
+					});
+					c.addEventListener('keydown', function(e){
+						if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); }
+					});
+				});
+			})();
+		})();
+	</script>
+</body>
+
+</html>

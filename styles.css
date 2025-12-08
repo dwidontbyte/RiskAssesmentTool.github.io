@@ -1,0 +1,154 @@
+:root{
+  --bg: #f6f8fb;
+  --panel: #ffffff;
+  --success: #0f9d58;
+  --warn: #f59e0b;
+  background-color:#000000;
+  color:#ffffff;
+  background-image: none;
+}
+
+.site-header .fs-4 { color: #ffffff; }
+.card-text { color: #000000; }
+.card-color { background-color: #000000; }
+.card-bg { background-color: #ffffff; }
+
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background-color:var(--bg);
+  color:#ffffff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-image: url('images/bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.wrap{max-width:var(--max-width);margin:0 auto;padding:1rem}
+
+.site-header{background:rgba(255,255,255,0.9);border-bottom:1px solid #e6eef8}
+.site-header .wrap{display:flex;flex-direction:column;gap:0.25rem}
+.site-header h1{margin:0;font-size:1.25rem;color:#000000}
+.tagline{margin:0;color:var(--muted);font-size:0.9rem}
+
+.main-grid{display:grid;grid-template-columns:1fr;gap:1rem;padding:1rem 0}
+
+.panel{background:var(--panel);color:#000000;padding:1rem;border-radius:8px;box-shadow:0 1px 2px rgba(12,20,30,0.03)}
+.form-panel{color:#000000}
+.form-panel label{display:block;font-weight:600;margin-top:0.75rem;color:#000000}
+.form-panel input[type=text], .form-panel textarea, .form-panel select{
+  width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:6px;margin-top:0.25rem;background:#ffffff;color:#000000}
+.form-row{ display:flex; gap:0.75rem; }
+.form-row > div{ flex:1; }
+.form-actions{display:flex;gap:0.5rem;margin-top:1rem}
+.btn{
+  padding:0.5rem 0.75rem;
+  border-radius:6px;
+  border:1px solid transparent;
+  background:#ffffff;
+  color:#000000;
+  cursor:pointer;
+}
+.btn.primary{background:#ffffff;color:#000000;border-color:transparent}
+.btn:hover{opacity:0.92}
+
+/* Make all cards a neutral grey background and provide a logo placeholder
+   that uses background-image so missing files gracefully fall back to grey */
+.card{
+  color:#000000;
+}
+.logo-placeholder{
+  height:180px;
+  background-color:#ffffff;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+}
+
+/* Risk matrix styles */
+.matrix-panel{margin-top:1rem}
+.matrix-grid{display:grid;grid-template-columns:repeat(6, 1fr);gap:6px;align-items:stretch}
+.matrix-cell{padding:8px;border-radius:4px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:#fff}
+.matrix-cell .cell-label{font-size:0.85rem;color:#ffffff;text-align:center;display:block;padding:0 6px}
+.matrix-cell.header{background:transparent;color:#cbd5e1;font-weight:600}
+.matrix-cell.empty{background:transparent}
+.matrix-cell--clickable{cursor:pointer;outline:none;border:2px solid rgba(255,255,255,0.04)}
+.matrix-cell--clickable.low{background:#166534}
+.matrix-cell--clickable.moderate{background:#d97706}
+.matrix-cell--clickable.high{background:#b91c1c}
+.matrix-cell--clickable.critical{background:#7f1d1d}
+.matrix-cell--clickable.selected{box-shadow:0 0 0 3px rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.18)}
+
+@media (max-width:640px){
+  .matrix-grid{grid-template-columns:repeat(6, minmax(40px, 1fr));gap:4px}
+  .matrix-cell{font-size:0.8rem;padding:6px}
+}
+
+.results-panel .result-summary{display:flex;flex-direction:column;gap:1rem}
+.score{display:flex;align-items:center;gap:1rem}
+.score-value{font-size:2rem;font-weight:700;padding:0.25rem 0.5rem;border-radius:6px;background:#f1f5f9}
+.score-value.low{background:#02773b;color:white}
+.score-value.moderate{background:#e48006;color:white}
+.score-value.high{background:#ff1500;color:white}
+.score-value.critical{background:#580101;color:white}
+.score-label{font-weight:600}
+
+.recommendations ul{padding-left:1rem;margin:0}
+.recommendations li{margin:0.4rem 0}
+.muted{color:var(--muted)}
+
+.site-footer{padding:1rem 0;color:#ffffff;text-align:center}
+
+/* Responsive layout for larger screens */
+@media (min-width: 840px){
+  .main-grid{grid-template-columns:320px 1fr}
+  .site-header .wrap{flex-direction:row;justify-content:space-between;align-items:center}
+}
+
+/* small adjustments for very small screens */
+@media (max-width:420px) {
+  .form-row { flex-direction:column; width: 100%; }
+}
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #1f6feb;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background-color:var(--bg);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.form-panel {
+  background-color: #ffffff;
+  color: black;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, Impact, -bold-italic, Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  font-size: 17px;
+  
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #616161;
+  color: white;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, Impact, -bold-italic, Arial, Helvetica, sans-serif;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
