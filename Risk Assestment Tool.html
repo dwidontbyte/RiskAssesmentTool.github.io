@@ -219,7 +219,7 @@
 			const riskColors = {low: '#166534', moderate: '#d97706', high: '#b91c1c', critical: '#7f1d1d'};
 			for(let s = 5; s >= 1; s--){
 				matrixHTML += `<tr style="background:#f9f9f9;">`;
-				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;background:#e9e9e9;">S${s}</td>`;
+				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;background:#333;color:#fff;">S${s}</td>`;
 				for(let l = 1; l <= 5; l++){
 					const score = l * s;
 					let level = 'low';
@@ -379,5 +379,6 @@
 </body>
 
 </html>
+
 
 
