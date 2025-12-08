@@ -69,6 +69,7 @@
 				<div class="form-actions">
 					<button type="submit" id="calc-btn" class="btn primary">Calculate Risk</button>
 					<button type="button" id="reset-btn" class="btn">Reset</button>
+					<button type="button" id="export-btn" class="btn" style="background:#28a745;color:#fff;" title="Export assessment as PDF">Export as PDF</button>
 				</div>
 			</form>
 		</aside>
@@ -155,13 +156,12 @@
 	<script>
 		// Minimal interactive demo: score = likelihood * severity
 		(function(){
-			const form = document.getElementById('risk-form');
-			const scoreValue = document.getElementById('score-value');
-			const scoreLabel = document.getElementById('score-label');
-			const recommendList = document.getElementById('recommend-list');
-			const resetBtn = document.getElementById('reset-btn');
-
-			function riskLevel(score){
+		const form = document.getElementById('risk-form');
+		const scoreValue = document.getElementById('score-value');
+		const scoreLabel = document.getElementById('score-label');
+		const recommendList = document.getElementById('recommend-list');
+		const resetBtn = document.getElementById('reset-btn');
+		const exportBtn = document.getElementById('export-btn');			function riskLevel(score){
 				if(score <= 4) return {label: 'Low', class: 'low', advice: ['Monitor periodically.']};
 				if(score <= 8) return {label: 'Moderate', class: 'moderate', advice: ['Review controls and reduce exposure.']};
 				if(score <= 12) return {label: 'High', class: 'high', advice: ['Implement additional mitigations and escalate.']};
@@ -173,23 +173,142 @@
 				calculateAndDisplay();
 			});
 
-			resetBtn.addEventListener('click', function(){
-				form.reset();
-				scoreValue.textContent = '—';
-				scoreValue.className = 'score-value';
-				scoreLabel.textContent = 'No calculation yet';
-				recommendList.innerHTML = '<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>';
-				// clear matrix selections and labels
-				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
-				cells.forEach(c => {
-					c.classList.remove('selected');
-					const label = c.querySelector('.cell-label');
-					if(label) label.textContent = '';
-				});
+		resetBtn.addEventListener('click', function(){
+			form.reset();
+			scoreValue.textContent = '—';
+			scoreValue.className = 'score-value';
+			scoreLabel.textContent = 'No calculation yet';
+			recommendList.innerHTML = '<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>';
+			// clear matrix selections and labels
+			const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
+			cells.forEach(c => {
+				c.classList.remove('selected');
+				const label = c.querySelector('.cell-label');
+				if(label) label.textContent = '';
 			});
+		});
 
-			// helper used by form submit and matrix clicks
-			function calculateAndDisplay(){
+		exportBtn.addEventListener('click', function(){
+			if(scoreValue.textContent === '—'){
+				alert('Please calculate a risk assessment first before exporting.');
+				return;
+			}
+			exportToPDF();
+		});		// export assessment to PDF
+		function exportToPDF(){
+			const hazard = form.hazard.value.trim() || 'Unnamed hazard';
+			const likelihood = form.likelihood.value;
+			const severity = form.severity.value;
+			const description = form.description.value.trim();
+			const mitigation = form.mitigation.value.trim();
+			const score = scoreValue.textContent;
+			const riskLabel = scoreLabel.textContent;
+			const timestamp = new Date().toLocaleString();
+
+			// Build risk matrix table for PDF
+			let matrixHTML = '<table style="width:100%;border-collapse:collapse;margin:15px 0;">';
+			matrixHTML += '<tr style="background:#333;color:#fff;">';
+			matrixHTML += '<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;">S\\L</td>';
+			for(let l = 1; l <= 5; l++){
+				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;">L${l}</td>`;
+			}
+			matrixHTML += '</tr>';
+
+			// Severity rows 5 down to 1
+			const riskColors = {low: '#166534', moderate: '#d97706', high: '#b91c1c', critical: '#7f1d1d'};
+			for(let s = 5; s >= 1; s--){
+				matrixHTML += `<tr style="background:#f9f9f9;">`;
+				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;background:#e9e9e9;">S${s}</td>`;
+				for(let l = 1; l <= 5; l++){
+					const score = l * s;
+					let level = 'low';
+					if(score <= 4) level = 'low';
+					else if(score <= 8) level = 'moderate';
+					else if(score <= 12) level = 'high';
+					else level = 'critical';
+					const bgColor = riskColors[level];
+					matrixHTML += `<td style="padding:8px;border:1px solid #999;background:${bgColor};color:#fff;text-align:center;font-weight:bold;">${score}</td>`;
+				}
+				matrixHTML += '</tr>';
+			}
+			matrixHTML += '</table>';
+
+			// Build risk legend
+			let legendHTML = '<div style="margin:15px 0;">';
+			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.low + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Low Risk:</strong> Score 1-4</p>';
+			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.moderate + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Moderate Risk:</strong> Score 5-8</p>';
+			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.high + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">High Risk:</strong> Score 9-12</p>';
+			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.critical + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Critical Risk:</strong> Score 13+</p>';
+			legendHTML += '</div>';
+
+			// Create PDF content
+			const element = document.createElement('div');
+			element.style.padding = '20px';
+			element.style.fontFamily = 'Arial, sans-serif';
+			element.innerHTML = `
+				<h1 style="color:#000;margin-bottom:20px;">Risk Assessment Report</h1>
+				<p><strong>Generated:</strong> ${timestamp}</p>
+				<hr style="margin:20px 0;">
+				
+				<h2 style="color:#000;margin-top:20px;">Assessment Details</h2>
+				<table style="width:100%;border-collapse:collapse;margin:15px 0;color:#000;">
+					<tr style="border-bottom:1px solid #ccc;">
+						<td style="padding:8px;font-weight:bold;width:30%;color:#000;">Hazard/Asset:</td>
+						<td style="padding:8px;color:#000;">${hazard}</td>
+					</tr>
+					<tr style="border-bottom:1px solid #ccc;background:#f9f9f9;">
+						<td style="padding:8px;font-weight:bold;color:#000;">Description:</td>
+						<td style="padding:8px;color:#000;">${description || 'N/A'}</td>
+					</tr>
+					<tr style="border-bottom:1px solid #ccc;">
+						<td style="padding:8px;font-weight:bold;color:#000;">Likelihood:</td>
+						<td style="padding:8px;color:#000;">${likelihood}</td>
+					</tr>
+					<tr style="border-bottom:1px solid #ccc;background:#f9f9f9;">
+						<td style="padding:8px;font-weight:bold;color:#000;">Severity:</td>
+						<td style="padding:8px;color:#000;">${severity}</td>
+					</tr>
+					<tr style="border-bottom:1px solid #ccc;">
+						<td style="padding:8px;font-weight:bold;color:#000;">Mitigations:</td>
+						<td style="padding:8px;color:#000;">${mitigation || 'None specified'}</td>
+					</tr>
+				</table>
+
+				<h2 style="color:#000;margin-top:20px;">Risk Score</h2>
+				<div style="background:#f0f0f0;padding:15px;border-radius:5px;margin:15px 0;">
+					<p style="font-size:28px;font-weight:bold;color:#000;margin:0;">${score}</p>
+					<p style="color:#666;margin:5px 0 0 0;">${riskLabel}</p>
+				</div>
+
+				<h2 style="color:#000;margin-top:20px;">Recommendations</h2>
+				<ul style="margin:15px 0;color:#000;">
+					${Array.from(recommendList.querySelectorAll('li')).map(li => `<li style="margin:5px 0;color:#000;">${li.textContent}</li>`).join('')}
+				</ul>
+
+				<h2 style="color:#000;margin-top:20px;page-break-before:always;">Risk Matrix</h2>
+				<p style="color:#666;font-size:12px;margin:10px 0;">This matrix shows all possible risk scores based on Likelihood (L1-L5) and Severity (S1-S5) combinations.</p>
+				${matrixHTML}
+
+				<h2 style="color:#000;margin-top:20px;">Risk Level Guide</h2>
+				${legendHTML}
+
+				<hr style="margin:20px 0;">
+				<p style="font-size:11px;color:#999;margin-top:20px;">This report was generated using the NLNB Risk Assessment Tool for ETI 302.</p>
+			`;
+
+			const opt = {
+				margin: 10,
+				filename: `risk-assessment-${hazard.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.pdf`,
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2 },
+				jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+			};
+
+			html2pdf().set(opt).from(element).save();
+		}
+
+		// helper used by form submit and matrix clicks
+		function calculateAndDisplay(){
 				const likelihood = Number(form.likelihood.value || 0);
 				const severity = Number(form.severity.value || 0);
 				const hazard = form.hazard.value.trim() || 'Unnamed hazard';
@@ -241,6 +360,10 @@
 					c.classList.add(level.class);
 					c.tabIndex = 0;
 					c.addEventListener('click', function(){
+						// Reset form fields when clicking a new matrix cell
+						form.hazard.value = '';
+						form.description.value = '';
+						form.mitigation.value = '';
 						form.likelihood.value = l;
 						form.severity.value = s;
 						calculateAndDisplay();
