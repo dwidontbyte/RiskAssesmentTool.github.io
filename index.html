@@ -27,354 +27,60 @@
       </div>
     </header>
 
-    <main class="wrap main-grid" id="app">
-		<!-- Form / controls -->
-		<aside class="panel form-panel" aria-labelledby="input-heading">
-			<h2 id="input-heading">Risk Input</h2>
-			
-			<form id="risk-form">
-				<label for="hazard">Hazard / Asset</label>
-				<input id="hazard" name="hazard" type="text" placeholder="e.g. Chemical storage" required>
+    <main>
+      <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <h1 class="fw-light text-light">NLNB Risk Assessment Tool</h1>
+            <p class="lead text-light">Quickly identify, evaluate, and prioritize potential hazards.</p>
+            <p>
+              <a href="Risk%20Assestment%20Tool.html" class="btn btn-primary my-2">Open Tool</a>
+              <a href="Risk.html" class="btn btn-outline-secondary my-2">Learn More</a>
+            </p>
+          </div>
+        </div>
+      </section>
 
-				<label for="description">Short description</label>
-				<textarea id="description" name="description" rows="3" placeholder="Describe the hazard"></textarea>
+      <div class="album py-5">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card shadow-sm">
+                <div class="card-img-top logo-placeholder" style="background-image:url('images/report.png')" role="img" aria-label="Report logo"></div>
+                <div class="card-body" color="#000000">
+                  <p class="card-text">Use the tool to score hazards by likelihood and severity and get recommended actions.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <div class="card-img-top logo-placeholder" style="background-image:url('images/multiple\ entries.png')" role="img" aria-label="Multiple entries logo"></div>
+                <div class="card-body">
+                  <p class="card-text">Track multiple entries and prioritize follow-up work.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <div class="card-img-top logo-placeholder" style="background-image:url('images/export.png')" role="img" aria-label="Export logo"></div>
+                <div class="card-body">
+                  <p class="card-text">Generate reports or export your findings for stakeholders.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-				<div class="row">
-					<div>
-						<label for="likelihood">Likelihood</label>
-						<select id="likelihood" name="likelihood" required>
-							<option value="1">1 — Rare</option>
-							<option value="2">2 — Unlikely</option>
-							<option value="3" selected>3 — Possible</option>
-							<option value="4">4 — Likely</option>
-							<option value="5">5 — Almost Certain</option>
-						</select>
-					</div>
-					<div>
-						<label for="severity">Severity</label>
-						<select id="severity" name="severity" required>
-							<option value="1">1 — Insignificant</option>
-							<option value="2">2 — Minor</option>
-							<option value="3" selected>3 — Moderate</option>
-							<option value="4">4 — Major</option>
-							<option value="5">5 — Catastrophic</option>
-						</select>
-					</div>
-				</div>
+    <footer class="text-light py-5">
+      <div class="container">
+        <p class="mb-1">Built for ETI 302 — demo site.</p>
+      </div>
+    </footer>
 
-				<label for="mitigation">Existing mitigations (optional)</label>
-				<input id="mitigation" name="mitigation" type="text" placeholder="e.g. Fire suppression system">
-				
-
-				<div class="form-actions">
-					<button type="submit" id="calc-btn" class="btn primary">Calculate Risk</button>
-					<button type="button" id="reset-btn" class="btn">Reset</button>
-					<button type="button" id="export-btn" class="btn" style="background:#28a745;color:#fff;" title="Export assessment as PDF">Export as PDF</button>
-				</div>
-			</form>
-		</aside>
-
-		<!-- Results -->
-		<section class="panel results-panel" aria-live="polite" aria-atomic="true">
-			<h2>Results</h2>
-			<div class="result-summary">
-				<div class="score">
-					<span class="score-value" id="score-value">—</span>
-					<span class="score-label" id="score-label">No calculation yet</span>
-				</div>
-				<div class="recommendations">
-					<h3>Recommended actions</h3>
-					<ul id="recommend-list">
-						<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>
-					</ul>
-				</div>
-
-				<!-- Risk matrix -->
-				<div class="matrix-panel" aria-label="Risk matrix">
-				  <h3>Risk Matrix</h3>
-				  <div class="matrix-grid" role="grid" aria-hidden="false">
-				    <!-- header row: empty corner then Likelihood 1..5 -->
-				    <div class="matrix-cell header empty"></div>
-				    <div class="matrix-cell header">L1</div>
-				    <div class="matrix-cell header">L2</div>
-				    <div class="matrix-cell header">L3</div>
-				    <div class="matrix-cell header">L4</div>
-				    <div class="matrix-cell header">L5</div>
-
-				    <!-- severity 5 (top) -->
-					<div class="matrix-cell header">S5</div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="5" role="gridcell"><span class="cell-label"></span></div>
-
-				    <!-- severity 4 -->
-					<div class="matrix-cell header">S4</div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="4" role="gridcell"><span class="cell-label"></span></div>
-
-				    <!-- severity 3 -->
-					<div class="matrix-cell header">S3</div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="3" role="gridcell"><span class="cell-label"></span></div>
-
-				    <!-- severity 2 -->
-					<div class="matrix-cell header">S2</div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="2" role="gridcell"><span class="cell-label"></span></div>
-
-				    <!-- severity 1 (bottom) -->
-					<div class="matrix-cell header">S1</div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="1" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="2" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="3" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="4" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
-					<div class="matrix-cell matrix-cell--clickable" data-likelihood="5" data-severity="1" role="gridcell"><span class="cell-label"></span></div>
-				  </div>
-				  <p class="muted small">Click a cell to set Likelihood and Severity; cells are colored by risk band.</p>
-				</div>
-			</div>
-		</section>
-	</main>
-
-	<footer class="site-footer">
-		<div class="wrap">
-			<small>Built for ETI 302 — simple demo tool. Not for production use.</small>
-		</div>
-	</footer>
-
-	<script>
-		// Minimal interactive demo: score = likelihood * severity
-		(function(){
-		const form = document.getElementById('risk-form');
-		const scoreValue = document.getElementById('score-value');
-		const scoreLabel = document.getElementById('score-label');
-		const recommendList = document.getElementById('recommend-list');
-		const resetBtn = document.getElementById('reset-btn');
-		const exportBtn = document.getElementById('export-btn');			function riskLevel(score){
-				if(score <= 4) return {label: 'Low', class: 'low', advice: ['Monitor periodically.']};
-				if(score <= 8) return {label: 'Moderate', class: 'moderate', advice: ['Review controls and reduce exposure.']};
-				if(score <= 12) return {label: 'High', class: 'high', advice: ['Implement additional mitigations and escalate.']};
-				return {label: 'Critical', class: 'critical', advice: ['Immediate action required. Evacuate if necessary.']};
-			}
-
-			form.addEventListener('submit', function(e){
-				e.preventDefault();
-				calculateAndDisplay();
-			});
-
-		resetBtn.addEventListener('click', function(){
-			form.reset();
-			scoreValue.textContent = '—';
-			scoreValue.className = 'score-value';
-			scoreLabel.textContent = 'No calculation yet';
-			recommendList.innerHTML = '<li class="muted">Enter values and click Calculate Risk to see recommendations.</li>';
-			// clear matrix selections and labels
-			const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
-			cells.forEach(c => {
-				c.classList.remove('selected');
-				const label = c.querySelector('.cell-label');
-				if(label) label.textContent = '';
-			});
-		});
-
-		exportBtn.addEventListener('click', function(){
-			if(scoreValue.textContent === '—'){
-				alert('Please calculate a risk assessment first before exporting.');
-				return;
-			}
-			exportToPDF();
-		});		// export assessment to PDF
-		function exportToPDF(){
-			const hazard = form.hazard.value.trim() || 'Unnamed hazard';
-			const likelihood = form.likelihood.value;
-			const severity = form.severity.value;
-			const description = form.description.value.trim();
-			const mitigation = form.mitigation.value.trim();
-			const score = scoreValue.textContent;
-			const riskLabel = scoreLabel.textContent;
-			const timestamp = new Date().toLocaleString();
-
-			// Build risk matrix table for PDF
-			let matrixHTML = '<table style="width:100%;border-collapse:collapse;margin:15px 0;">';
-			matrixHTML += '<tr style="background:#333;color:#fff;">';
-			matrixHTML += '<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;">S\\L</td>';
-			for(let l = 1; l <= 5; l++){
-				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;">L${l}</td>`;
-			}
-			matrixHTML += '</tr>';
-
-			// Severity rows 5 down to 1
-			const riskColors = {low: '#166534', moderate: '#d97706', high: '#b91c1c', critical: '#7f1d1d'};
-			for(let s = 5; s >= 1; s--){
-				matrixHTML += `<tr style="background:#f9f9f9;">`;
-				matrixHTML += `<td style="padding:8px;border:1px solid #999;font-weight:bold;text-align:center;background:#e9e9e9;">S${s}</td>`;
-				for(let l = 1; l <= 5; l++){
-					const score = l * s;
-					let level = 'low';
-					if(score <= 4) level = 'low';
-					else if(score <= 8) level = 'moderate';
-					else if(score <= 12) level = 'high';
-					else level = 'critical';
-					const bgColor = riskColors[level];
-					matrixHTML += `<td style="padding:8px;border:1px solid #999;background:${bgColor};color:#fff;text-align:center;font-weight:bold;">${score}</td>`;
-				}
-				matrixHTML += '</tr>';
-			}
-			matrixHTML += '</table>';
-
-			// Build risk legend
-			let legendHTML = '<div style="margin:15px 0;">';
-			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.low + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Low Risk:</strong> Score 1-4</p>';
-			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.moderate + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Moderate Risk:</strong> Score 5-8</p>';
-			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.high + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">High Risk:</strong> Score 9-12</p>';
-			legendHTML += '<p style="margin:5px 0;color:#000;"><span style="display:inline-block;width:20px;height:20px;background:' + riskColors.critical + ';margin-right:8px;vertical-align:middle;border:1px solid #ccc;"></span><strong style="color:#000;">Critical Risk:</strong> Score 13+</p>';
-			legendHTML += '</div>';
-
-			// Create PDF content
-			const element = document.createElement('div');
-			element.style.padding = '20px';
-			element.style.fontFamily = 'Arial, sans-serif';
-			element.innerHTML = `
-				<h1 style="color:#000;margin-bottom:20px;">Risk Assessment Report</h1>
-				<p><strong>Generated:</strong> ${timestamp}</p>
-				<hr style="margin:20px 0;">
-				
-				<h2 style="color:#000;margin-top:20px;">Assessment Details</h2>
-				<table style="width:100%;border-collapse:collapse;margin:15px 0;color:#000;">
-					<tr style="border-bottom:1px solid #ccc;">
-						<td style="padding:8px;font-weight:bold;width:30%;color:#000;">Hazard/Asset:</td>
-						<td style="padding:8px;color:#000;">${hazard}</td>
-					</tr>
-					<tr style="border-bottom:1px solid #ccc;background:#f9f9f9;">
-						<td style="padding:8px;font-weight:bold;color:#000;">Description:</td>
-						<td style="padding:8px;color:#000;">${description || 'N/A'}</td>
-					</tr>
-					<tr style="border-bottom:1px solid #ccc;">
-						<td style="padding:8px;font-weight:bold;color:#000;">Likelihood:</td>
-						<td style="padding:8px;color:#000;">${likelihood}</td>
-					</tr>
-					<tr style="border-bottom:1px solid #ccc;background:#f9f9f9;">
-						<td style="padding:8px;font-weight:bold;color:#000;">Severity:</td>
-						<td style="padding:8px;color:#000;">${severity}</td>
-					</tr>
-					<tr style="border-bottom:1px solid #ccc;">
-						<td style="padding:8px;font-weight:bold;color:#000;">Mitigations:</td>
-						<td style="padding:8px;color:#000;">${mitigation || 'None specified'}</td>
-					</tr>
-				</table>
-
-				<h2 style="color:#000;margin-top:20px;">Risk Score</h2>
-				<div style="background:#f0f0f0;padding:15px;border-radius:5px;margin:15px 0;">
-					<p style="font-size:28px;font-weight:bold;color:#000;margin:0;">${score}</p>
-					<p style="color:#666;margin:5px 0 0 0;">${riskLabel}</p>
-				</div>
-
-				<h2 style="color:#000;margin-top:20px;">Recommendations</h2>
-				<ul style="margin:15px 0;color:#000;">
-					${Array.from(recommendList.querySelectorAll('li')).map(li => `<li style="margin:5px 0;color:#000;">${li.textContent}</li>`).join('')}
-				</ul>
-
-				<h2 style="color:#000;margin-top:20px;page-break-before:always;">Risk Matrix</h2>
-				<p style="color:#666;font-size:12px;margin:10px 0;">This matrix shows all possible risk scores based on Likelihood (L1-L5) and Severity (S1-S5) combinations.</p>
-				${matrixHTML}
-
-				<h2 style="color:#000;margin-top:20px;">Risk Level Guide</h2>
-				${legendHTML}
-
-				<hr style="margin:20px 0;">
-				<p style="font-size:11px;color:#999;margin-top:20px;">This report was generated using the NLNB Risk Assessment Tool for ETI 302.</p>
-			`;
-
-			const opt = {
-				margin: 10,
-				filename: `risk-assessment-${hazard.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.pdf`,
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2 },
-				jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-			};
-
-			html2pdf().set(opt).from(element).save();
-		}
-
-		// helper used by form submit and matrix clicks
-		function calculateAndDisplay(){
-				const likelihood = Number(form.likelihood.value || 0);
-				const severity = Number(form.severity.value || 0);
-				const hazard = form.hazard.value.trim() || 'Unnamed hazard';
-				const mitigation = form.mitigation.value.trim();
-
-				const score = likelihood * severity;
-				const level = riskLevel(score);
-
-				scoreValue.textContent = score;
-				scoreValue.className = 'score-value ' + level.class;
-				scoreLabel.textContent = level.label + ' — ' + hazard;
-
-				// recommendations
-				recommendList.innerHTML = '';
-				level.advice.forEach(a => {
-					const li = document.createElement('li');
-					li.textContent = a + (mitigation ? ' (consider: ' + mitigation + ')' : '');
-					recommendList.appendChild(li);
-				});
-
-				// highlight matrix cell
-				highlightMatrixCell(likelihood, severity);
-			}
-
-			function highlightMatrixCell(likelihood, severity){
-				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
-				cells.forEach(c => c.classList.remove('selected'));
-				const selector = `.matrix-cell.matrix-cell--clickable[data-likelihood="${likelihood}"][data-severity="${severity}"]`;
-				const el = document.querySelector(selector);
-				if(el){
-					el.classList.add('selected');
-					// set the label inside the selected cell to the hazard name (if provided)
-					const label = el.querySelector('.cell-label');
-					if(label){
-						const hazardName = (form.hazard && form.hazard.value) ? form.hazard.value.trim() : '';
-						label.textContent = hazardName;
-					}
-				}
-			}
-
-			// initialize matrix coloring and click handlers
-			(function initMatrix(){
-				const cells = document.querySelectorAll('.matrix-cell.matrix-cell--clickable');
-				cells.forEach(c => {
-					const l = Number(c.dataset.likelihood);
-					const s = Number(c.dataset.severity);
-					const score = l * s;
-					const level = riskLevel(score);
-					c.classList.add(level.class);
-					c.tabIndex = 0;
-					c.addEventListener('click', function(){
-						// Reset form fields when clicking a new matrix cell
-						form.hazard.value = '';
-						form.description.value = '';
-						form.mitigation.value = '';
-						form.likelihood.value = l;
-						form.severity.value = s;
-						calculateAndDisplay();
-					});
-					c.addEventListener('keydown', function(e){
-						if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); }
-					});
-				});
-			})();
-		})();
-	</script>
-</body>
+    <!-- Bootstrap JS bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 
 </html>
